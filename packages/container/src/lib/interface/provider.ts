@@ -1,6 +1,5 @@
 import type { Type } from '../core/type';
 import { Token } from './token';
-import { Observable } from './observable';
 
 export interface GenericProvider<T = any> {
   provide: Token<T>;
@@ -32,7 +31,7 @@ export interface ValueProvider<T> {
  * a generic observable. In this last case, the observable must complete.
  */
 export interface FactoryProvider<T> {
-  useFactory: (...args: any[]) => T | Promise<T> | Observable<T>;
+  useFactory: (...args: any[]) => T;
   provide: Token<T>;
   deps?: any[]
 }
