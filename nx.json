@@ -1,5 +1,5 @@
 {
-  "npmScope": "tiny-di",
+  "npmScope": "ts-di",
   "affected": { "defaultBase": "master" },
   "implicitDependencies": {
     "workspace.json": "*",

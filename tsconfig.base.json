@@ -15,7 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@tiny-di/container": ["packages/container/src/index.ts"]
+      "@ts-di/container": ["packages/container/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
