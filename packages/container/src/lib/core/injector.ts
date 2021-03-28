@@ -3,6 +3,7 @@ import { DIProvider, GenericProvider, TypeProvider } from '../interface/provider
 import { fold, fromNullable } from 'fp-ts/Option';
 import { isProvider } from '../utils/isProvider';
 import { pipe } from 'fp-ts/function';
+import { map } from 'fp-ts/Array';
 import { mergeProviders } from '../utils/mergeProvider';
 import type { Type } from './type';
 import { getFlatProviderTree } from '../utils/getFlatProviderTree';
@@ -33,7 +34,8 @@ export abstract class Injector {
     parent?: Injector
   ): Injector {
     const resolveProvider = <T>(p: DIProvider<T>): DIProvider => pipe(
-      fromNullable(isProvider(p)),
+      isProvider(p) ? true : null,
+      fromNullable,
       fold(
         () => ({ provide: p as TypeProvider<T>, useClass: p } as DIProvider),
         () => p
@@ -60,7 +62,7 @@ export abstract class Injector {
 
   addProviders(registry: DIProvider[]): () => void {
     const _providers = this.getProviders();
-    providers.set(this, mergeProviders(registry)(_providers));
+    providers.set(this, mergeProviders(_providers)(registry));
     registry.map(it => this.#instances.delete(it.provide as Token));
     return () => this.addProviders(_providers);
   }
@@ -132,13 +134,8 @@ export abstract class Injector {
   }
 }
 
-const g = (injector: Injector) => {
-  const v = providers.get(injector);
-  console.log(v);
-  return providers.get(injector);
-};
 export const safeGetProvider = (injector: Injector) => pipe(
-  g(injector),
+  providers.get(injector),
   fromNullable,
   fold(() => [], v => v)
 );

@@ -25,4 +25,3 @@ export const mergeProviders = (p1: DIProvider[]) => (p2: DIProvider[]): DIProvid
     ))
   ) as DIProvider[];
 };
-
