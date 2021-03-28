@@ -7,5 +7,5 @@ export const isType = <T>(obj: T): boolean => typeof obj === 'function';
  * @internal
  */
 export interface Type<T> extends Function {
-  new(...args: any[]): T[]
+  new(...args: any[]): T
 }
