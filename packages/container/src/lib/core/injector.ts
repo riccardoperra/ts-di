@@ -42,16 +42,27 @@ export abstract class Injector {
       )
     );
 
-    const resolvedProviders = registry.map(resolveProvider);
+    const parentInjector = (p: Injector | undefined) => pipe(
+      p,
+      fromNullable,
+      fold(
+        () => rootInjector,
+        (p1) => p1
+      )
+    );
 
-    const instance = new StaticInjector(
-      resolvedProviders,
-      isDefined(parent) ? parent : rootInjector
+    const getInstance = (ps: DIProvider[]) => new StaticInjector(ps, parentInjector(parent));
+
+    const instance = pipe(
+      registry,
+      map(resolveProvider),
+      getInstance
     );
 
     if (!rootInjector) {
       rootInjector = instance;
     }
+
     return instance;
   }
 
