@@ -2,6 +2,15 @@
   "name": "ts-di",
   "version": "0.1.0",
   "license": "MIT",
+  "author": {
+    "email": "riccardo.perra@icloud.com",
+    "name": "Riccardo Perra"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/riccardoperra/ts-di",
+  },
+  "keywords": ["di", "dependency injection", "typescript", "react", "container", "ioc"],
   "scripts": {
     "nx": "nx",
     "start": "nx serve",
