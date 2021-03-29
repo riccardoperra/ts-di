@@ -1,23 +1,44 @@
 {
   "implicitDependencies": {
     "workspace.json": "*",
-    "package.json": { "dependencies": "*", "devDependencies": "*" },
+    "package.json": {
+      "dependencies": "*",
+      "devDependencies": "*"
+    },
     "tsconfig.base.json": "*",
     "tslint.json": "*",
     ".eslintrc.json": "*",
     "nx.json": "*"
   },
-  "affected": { "defaultBase": "master" },
+  "affected": {
+    "defaultBase": "master"
+  },
   "npmScope": "ts-di",
   "tasksRunnerOptions": {
     "default": {
       "runner": "@nrwl/workspace/tasks-runners/default",
-      "options": { "cacheableOperations": ["build", "lint", "test", "e2e"] }
+      "options": {
+        "cacheableOperations": ["build", "lint", "test", "e2e"]
+      }
     }
   },
-  "workspaceLayout": { "appsDir": "packages", "libsDir": "packages" },
+  "workspaceLayout": {
+    "appsDir": "packages",
+    "libsDir": "packages"
+  },
   "projects": {
-    "core": { "tags": ["scope:public", "type:util", "target:all"] },
-    "react": { "tags": ["scope:public", "type:util", "target:all"] }
+    "core": {
+      "tags": ["scope:public", "type:util", "target:all"]
+    },
+    "react": {
+      "tags": ["scope:public", "type:util", "target:all"]
+    },
+    "react-demo-app": {
+      "tags": []
+    },
+    "react-demo-app-e2e": {
+      "tags": [],
+      "implicitDependencies": ["react-demo-app"]
+    }
   }
 }

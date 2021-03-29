@@ -1,13 +1,15 @@
 import { Token } from '../interface/token';
-import { DIProvider, GenericProvider, TypeProvider } from '../interface/provider';
-import { fold, fromNullable } from 'fp-ts/Option';
+import { DIProvider, TypeProvider } from '../interface/provider';
 import { isProvider } from '../utils/isProvider';
 import { pipe } from 'fp-ts/function';
+import * as A from 'fp-ts/Array';
 import { map } from 'fp-ts/Array';
 import { mergeProviders } from '../utils/mergeProvider';
-import type { Type } from './type';
 import { getFlatProviderTree } from '../utils/getFlatProviderTree';
-import { isDefined } from '../utils/isDefined';
+import * as O from 'fp-ts/Option';
+import { fromNullable } from 'fp-ts/Option';
+import { mapGenericToProvider } from '../utils/mapGenericToProvider';
+import { mapToGenericProvider } from '../utils/mapToGenericProvider';
 
 /**
  * @internal
@@ -18,10 +20,6 @@ let rootInjector: Injector;
  */
 const providers = new WeakMap<Injector, DIProvider[]>();
 
-const lastOf = <T extends unknown>(arr: T[]) => arr.length > 0 ? arr[arr.length - 1] : null;
-const findLast = (token: Token) => (providers: DIProvider[]) => lastOf<DIProvider>(
-  providers.filter(p => p.provide === token)
-);
 
 export abstract class Injector {
   #instances: WeakMap<Token, unknown> = new WeakMap<Token, unknown>();
@@ -35,8 +33,8 @@ export abstract class Injector {
   ): Injector {
     const resolveProvider = <T>(p: DIProvider<T>): DIProvider => pipe(
       isProvider(p) ? true : null,
-      fromNullable,
-      fold(
+      O.fromNullable,
+      O.fold(
         () => ({ provide: p as TypeProvider<T>, useClass: p } as DIProvider),
         () => p
       )
@@ -44,8 +42,8 @@ export abstract class Injector {
 
     const parentInjector = (p: Injector | undefined) => pipe(
       p,
-      fromNullable,
-      fold(
+      O.fromNullable,
+      O.fold(
         () => rootInjector,
         (p1) => p1
       )
@@ -81,8 +79,8 @@ export abstract class Injector {
   private getProviders(): DIProvider[] {
     return pipe(
       providers.get(this),
-      fromNullable,
-      fold(() => [], ps => [...ps])
+      O.fromNullable,
+      O.fold(() => [], ps => [...ps])
     );
   }
 
@@ -104,28 +102,31 @@ export abstract class Injector {
 
 
   private getInstanceFromRegistry = <T>(token: Token<T>, providers?: DIProvider[]): T | null | undefined => {
-    const provider = findLast(token)(providers || this.getProviders());
-    const deps = provider?.deps ? provider.deps?.map(this.getAndCreateInstance) : [];
+    const provider = pipe(
+      providers,
+      fromNullable,
+      O.fold(() => this.getProviders(), p => p),
+      A.findLast<DIProvider>(p => p.provide === token)
+    );
 
-    const makeWithFactory = (fn?: (...args: any[]) => T) => fn ? fn.apply(deps) : null;
-    const makeWithClass = <T>(classType?: Type<T> | null): T | null => classType ? new classType(...deps) as T : null;
+    const deps = pipe(
+      provider,
+      O.fold(() => [], p => A.map(this.getAndCreateInstance)(pipe(
+        p.deps,
+        O.fromNullable,
+        O.fold(() => [], deps => deps)
+      )))
+    );
 
-    if (provider) {
-      if ((provider as GenericProvider<T>).useValue) {
-        return (provider as GenericProvider<T>).useValue;
-      }
-      if ((provider as GenericProvider<T>).useClass) {
-        return makeWithClass(
-          (provider as GenericProvider<T>).useClass
-        );
-      }
-      if ((provider as GenericProvider).useFactory) {
-        return makeWithFactory(
-          (provider as GenericProvider<T>).useFactory
-        );
-      }
-    }
-    return null;
+    return pipe(
+      provider,
+      O.fold(
+        () => null,
+        _ => mapGenericToProvider<T>(
+          mapToGenericProvider<T>(_)
+        )(deps)
+      )
+    );
   };
 
   private getInstanceFromParents<T>(token: Token<T>) {
@@ -147,8 +148,8 @@ export abstract class Injector {
 
 export const safeGetProvider = (injector: Injector) => pipe(
   providers.get(injector),
-  fromNullable,
-  fold(() => [], v => v)
+  O.fromNullable,
+  O.fold(() => [], v => v)
 );
 
 export class StaticInjector extends Injector {

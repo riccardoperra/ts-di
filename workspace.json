@@ -1,7 +1,25 @@
 {
   "version": 2,
-  "cli": { "defaultCollection": "@nrwl/react" },
-  "generators": { "@nrwl/react": { "application": { "babel": true } } },
+  "cli": {
+    "defaultCollection": "@nrwl/react"
+  },
+  "defaultProject": "react-demo-app",
+  "generators": {
+    "@nrwl/react": {
+      "application": {
+        "style": "styled-components",
+        "linter": "eslint",
+        "babel": true
+      },
+      "component": {
+        "style": "styled-components"
+      },
+      "library": {
+        "style": "styled-components",
+        "linter": "eslint"
+      }
+    }
+  },
   "projects": {
     "core": {
       "root": "packages/core",
@@ -10,12 +28,17 @@
       "targets": {
         "lint": {
           "executor": "@nrwl/linter:eslint",
-          "options": { "lintFilePatterns": ["packages/core/**/*.ts"] }
+          "options": {
+            "lintFilePatterns": ["packages/core/**/*.ts"]
+          }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
           "outputs": ["coverage/packages/core"],
-          "options": { "jestConfig": "packages/core/jest.config.js", "passWithNoTests": true }
+          "options": {
+            "jestConfig": "packages/core/jest.config.js",
+            "passWithNoTests": true
+          }
         },
         "build": {
           "executor": "@nrwl/node:package",
@@ -46,17 +69,125 @@
             "external": ["react", "react-dom"],
             "babelConfig": "@nrwl/react/plugins/bundle-babel",
             "rollupConfig": "@nrwl/react/plugins/bundle-rollup",
-            "assets": [{ "glob": "README.md", "input": ".", "output": "." }]
+            "assets": [
+              {
+                "glob": "README.md",
+                "input": ".",
+                "output": "."
+              }
+            ]
           }
         },
         "lint": {
           "executor": "@nrwl/linter:eslint",
-          "options": { "lintFilePatterns": ["packages/react/**/*.{ts,tsx,js,jsx}"] }
+          "options": {
+            "lintFilePatterns": ["packages/react/**/*.{ts,tsx,js,jsx}"]
+          }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
           "outputs": ["coverage/packages/react"],
-          "options": { "jestConfig": "packages/react/jest.config.js", "passWithNoTests": true }
+          "options": {
+            "jestConfig": "packages/react/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "react-demo-app": {
+      "root": "packages/react-demo-app",
+      "sourceRoot": "packages/react-demo-app/src",
+      "projectType": "application",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/web:build",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/packages/react-demo-app",
+            "index": "packages/react-demo-app/src/index.html",
+            "main": "packages/react-demo-app/src/main.tsx",
+            "polyfills": "packages/react-demo-app/src/polyfills.ts",
+            "tsConfig": "packages/react-demo-app/tsconfig.app.json",
+            "assets": ["packages/react-demo-app/src/favicon.ico", "packages/react-demo-app/src/assets"],
+            "styles": [],
+            "scripts": [],
+            "webpackConfig": "@nrwl/react/plugins/webpack"
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "packages/react-demo-app/src/environments/environment.ts",
+                  "with": "packages/react-demo-app/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "executor": "@nrwl/web:dev-server",
+          "options": {
+            "buildTarget": "react-demo-app:build"
+          },
+          "configurations": {
+            "production": {
+              "buildTarget": "react-demo-app:build:production"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["packages/react-demo-app/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/react-demo-app"],
+          "options": {
+            "jestConfig": "packages/react-demo-app/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "react-demo-app-e2e": {
+      "root": "packages/react-demo-app-e2e",
+      "sourceRoot": "packages/react-demo-app-e2e/src",
+      "projectType": "application",
+      "targets": {
+        "e2e": {
+          "executor": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "packages/react-demo-app-e2e/cypress.json",
+            "tsConfig": "packages/react-demo-app-e2e/tsconfig.e2e.json",
+            "devServerTarget": "react-demo-app:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "react-demo-app:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["packages/react-demo-app-e2e/**/*.{js,ts}"]
+          }
         }
       }
     }
