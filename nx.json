@@ -1,6 +1,4 @@
 {
-  "npmScope": "ts-di",
-  "affected": { "defaultBase": "master" },
   "implicitDependencies": {
     "workspace.json": "*",
     "package.json": { "dependencies": "*", "devDependencies": "*" },
@@ -9,12 +7,17 @@
     ".eslintrc.json": "*",
     "nx.json": "*"
   },
+  "affected": { "defaultBase": "master" },
+  "npmScope": "ts-di",
   "tasksRunnerOptions": {
     "default": {
       "runner": "@nrwl/workspace/tasks-runners/default",
       "options": { "cacheableOperations": ["build", "lint", "test", "e2e"] }
     }
   },
-  "projects": { "core": { "tags": ["scope:public", "type:util", "target:all"] } },
-  "workspaceLayout": { "appsDir": "packages", "libsDir": "packages" }
+  "workspaceLayout": { "appsDir": "packages", "libsDir": "packages" },
+  "projects": {
+    "core": { "tags": ["scope:public", "type:util", "target:all"] },
+    "react": { "tags": ["scope:public", "type:util", "target:all"] }
+  }
 }

@@ -16,7 +16,8 @@
     "baseUrl": ".",
     "paths": {
       "@ts-di/container": ["packages/container/src/index.ts"],
-      "@ts-di/core": ["packages/core/src/index.ts"]
+      "@ts-di/core": ["packages/core/src/index.ts"],
+      "@ts-di/react": ["packages/react/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
