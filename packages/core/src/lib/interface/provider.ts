@@ -1,23 +1,22 @@
 import type { Type } from '../core/type';
 import { Token } from './token';
 
-
 export enum DIProviderType {
   FACTORY,
   CLASS,
-  VALUE
+  VALUE,
 }
 
 export interface TypedClassProvider<T> extends ClassProvider<Type<T>> {
-  _type: DIProviderType.CLASS
+  _type: DIProviderType.CLASS;
 }
 
 export interface TypedFactoryProvider<T> extends FactoryProvider<T> {
-  _type: DIProviderType.FACTORY
+  _type: DIProviderType.FACTORY;
 }
 
 export interface TypedValueProvider<T> extends ValueProvider<T> {
-  _type: DIProviderType.VALUE
+  _type: DIProviderType.VALUE;
 }
 
 export type GenericProvider<T = any> =
@@ -40,7 +39,7 @@ export interface ValueProvider<T> {
    */
   useValue: T;
 
-  deps?: any[]
+  deps?: any[];
 }
 
 /**
@@ -51,7 +50,7 @@ export interface ValueProvider<T> {
 export interface FactoryProvider<T> {
   useFactory: (...args: any[]) => T;
   provide: Token<T>;
-  deps?: any[]
+  deps?: any[];
 }
 
 /**
@@ -87,15 +86,11 @@ export interface ClassProvider<T> {
    * in orders
    * @internal
    */
-  deps?: any[]
+  deps?: any[];
 }
 
 /**
  * Define the provider configuration type that will be used by the injector
  * @publicApi
  */
-export type DIProvider<T = any> =
-  | TypeProvider<T>
-  | ClassProvider<T>
-  | FactoryProvider<T>
-  | ValueProvider<T>;
+export type DIProvider<T = any> = TypeProvider<T> | ClassProvider<T> | FactoryProvider<T> | ValueProvider<T>;

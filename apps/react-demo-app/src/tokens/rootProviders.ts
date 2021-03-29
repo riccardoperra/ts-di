@@ -5,10 +5,10 @@ import { baseLogger, LOGGER } from './_logger';
 export const rootProviders: DIProvider[] = [
   {
     provide: BASE_APP_CONFIG,
-    useValue: appConfig
+    useValue: appConfig,
   },
   {
     provide: LOGGER,
-    useValue: baseLogger
-  }
+    useValue: baseLogger,
+  },
 ];

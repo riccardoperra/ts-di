@@ -10,32 +10,24 @@ const innerProviders: DIProvider[] = [
     provide: LOGGER,
     useValue: (...args: any[]) => {
       console.log('inner log', ...args);
-    }
-  }
-]
+    },
+  },
+];
 
 export function App() {
-  const clickFn = () => {
-  };
+  const clickFn = () => {};
 
   return (
     <div>
       <div>
-        <LoggerButton onClick={clickFn}>
-          Button with root context
-        </LoggerButton>
+        <LoggerButton onClick={clickFn}>Button with root context</LoggerButton>
       </div>
       <InjectorProvider providers={innerProviders}>
         <div>
-          <LoggerButton onClick={clickFn}>
-            Button with inner context
-          </LoggerButton>
+          <LoggerButton onClick={clickFn}>Button with inner context</LoggerButton>
         </div>
       </InjectorProvider>
-
-
     </div>
-
   );
 }
 

@@ -10,16 +10,15 @@ const Button = styled.button`
   display: inline-flex;
   justify-content: center;
   align-items: center;
-
 `;
 
 interface LoggerButtonProps {
   onClick: () => any;
 }
 
-export const LoggerButton: FC<LoggerButtonProps> = (props) => {
+export const LoggerButton: FC<LoggerButtonProps> = props => {
   const logger = useInject(LOGGER);
-  const onClick = (evt) => {
+  const onClick = evt => {
     const result = props.onClick();
     logger(result, 'event', evt);
   };

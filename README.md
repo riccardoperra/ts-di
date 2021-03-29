@@ -2,7 +2,7 @@
 
 **Dependency Injection container written in Typescript and Fp-Ts.**
 
---- 
+---
 
 This project is born only for **experimental purposes**, **it's not ready for production yet**. It provides a set of
 Angular-like utilities to manage dependency injection resolving provided tokens.
@@ -24,21 +24,18 @@ import { StaticInjector } from './injector';
 import { InjectionToken } from './injectionToken';
 
 interface IMyClass {
-  get(): string
+  get(): string;
 }
 
 class MyClass implements IMyClass {
-  constructor() {
-  }
+  constructor() {}
 
   get(): string {
     return this.constructor.name;
   }
 }
 
-export const injector = StaticInjector.create([
-  { provide: MyClass, useClass: MyClass }
-]);
+export const injector = StaticInjector.create([{ provide: MyClass, useClass: MyClass }]);
 
 const myClass1 = injector.get(MyClass);
 const myClass2 = injector.get(MyClass);
@@ -47,6 +44,7 @@ assert.strictEqual(myClass, myClass2); // true
 ```
 
 #### Use the TypeProvider shorthand
+
 Like Angular, it's possible to pass directly the class constructor instead of using `{provide: AnyClass, useClass: AnyClass}`.
 The behavior will be the same as it's the default case.
 
@@ -55,17 +53,16 @@ import { StaticInjector } from './injector';
 import { InjectionToken } from './injectionToken';
 
 class MyClass {
-  constructor() {
-  }
+  constructor() {}
 }
 
 export const injector = StaticInjector.create([
-  MyClass // { provide: MyClass, useClass: MyClass },
+  MyClass, // { provide: MyClass, useClass: MyClass },
 ]);
 
 const myClass = injector.get(MyClass);
 assertTrue(myClass instanceof MyClass); // true
-````
+```
 
 #### Nested Injection providing dependency
 
@@ -77,21 +74,20 @@ import { StaticInjector } from './injector';
 import { InjectionToken } from './injectionToken';
 
 interface IMyClass {
-  get(): string
+  get(): string;
 }
 
 class MyClass implements IMyClass {
-  constructor(public readonly myClass2: MyClass2) {
-  }
+  constructor(public readonly myClass2: MyClass2) {}
 
   get(): string {
-    return `${this.constructor.name} - Class`
+    return `${this.constructor.name} - Class`;
   }
 }
 
 class MyClass2 implements IMyClass {
   get(): string {
-    return `${this.constructor.name} - Class 2`
+    return `${this.constructor.name} - Class 2`;
   }
 }
 
@@ -121,11 +117,12 @@ export const TOKEN = InjectionToken.of('factoryFn1');
 
 export const injector = StaticInjector.create([
   {
-    provide: TOKEN, useFactory: () => {
+    provide: TOKEN,
+    useFactory: () => {
       console.log('factory call');
       return 'any';
-    }
-  }
+    },
+  },
 ]);
 
 const value = injector.get(TOKEN);
@@ -149,9 +146,7 @@ import { InjectionToken } from './injectionToken';
 
 export const TOKEN = InjectionToken.of('value1');
 
-export const injector = StaticInjector.create([
-  { provide: TOKEN, useValue: { key1: 'value' } }
-]);
+export const injector = StaticInjector.create([{ provide: TOKEN, useValue: { key1: 'value' } }]);
 
 const value = injector.get(TOKEN);
 

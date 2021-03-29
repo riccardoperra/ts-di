@@ -7,7 +7,7 @@ export interface AppConfig {
 
 export const appConfig: AppConfig = {
   appTitle: 'Demo App - 1',
-  appBaseColor: '#fff'
+  appBaseColor: '#fff',
 };
 
 export const BASE_APP_CONFIG = InjectionToken.create('appToken');

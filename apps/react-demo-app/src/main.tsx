@@ -7,8 +7,6 @@ import App from './app/app';
 import { InjectorProvider } from '@ts-di/react';
 import { rootProviders } from './tokens/rootProviders';
 
-
-
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>

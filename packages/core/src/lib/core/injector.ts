@@ -20,42 +20,36 @@ let rootInjector: Injector;
  */
 const providers = new WeakMap<Injector, DIProvider[]>();
 
-
 export abstract class Injector {
   #instances: WeakMap<Token, unknown> = new WeakMap<Token, unknown>();
   parent?: Injector;
 
   abstract get<T>(token: Token<T>): T | null;
 
-  static create(
-    registry: DIProvider[],
-    parent?: Injector
-  ): StaticInjector {
-    const resolveProvider = <T>(p: DIProvider<T>): DIProvider => pipe(
-      isProvider(p) ? true : null,
-      O.fromNullable,
-      O.fold(
-        () => ({ provide: p as TypeProvider<T>, useClass: p } as DIProvider),
-        () => p
-      )
-    );
+  static create(registry: DIProvider[], parent?: Injector): StaticInjector {
+    const resolveProvider = <T>(p: DIProvider<T>): DIProvider =>
+      pipe(
+        isProvider(p) ? true : null,
+        O.fromNullable,
+        O.fold(
+          () => ({ provide: p as TypeProvider<T>, useClass: p } as DIProvider),
+          () => p
+        )
+      );
 
-    const parentInjector = (p: Injector | undefined) => pipe(
-      p,
-      O.fromNullable,
-      O.fold(
-        () => rootInjector,
-        (p1) => p1
-      )
-    );
+    const parentInjector = (p: Injector | undefined) =>
+      pipe(
+        p,
+        O.fromNullable,
+        O.fold(
+          () => rootInjector,
+          p1 => p1
+        )
+      );
 
     const getInstance = (ps: DIProvider[]) => new StaticInjector(ps, parentInjector(parent));
 
-    const instance = pipe(
-      registry,
-      map(resolveProvider),
-      getInstance
-    );
+    const instance = pipe(registry, map(resolveProvider), getInstance);
 
     if (!rootInjector) {
       rootInjector = instance;
@@ -80,7 +74,10 @@ export abstract class Injector {
     return pipe(
       providers.get(this),
       O.fromNullable,
-      O.fold(() => [], ps => [...ps])
+      O.fold(
+        () => [],
+        ps => [...ps]
+      )
     );
   }
 
@@ -104,26 +101,36 @@ export abstract class Injector {
     const provider = pipe(
       providers,
       fromNullable,
-      O.fold(() => this.getProviders(), p => p),
+      O.fold(
+        () => this.getProviders(),
+        p => p
+      ),
       A.findLast<DIProvider>(p => p.provide === token)
     );
 
     const deps = pipe(
       provider,
-      O.fold(() => [], p => A.map(this.getAndCreateInstance)(pipe(
-        p.deps,
-        O.fromNullable,
-        O.fold(() => [], deps => deps)
-      )))
+      O.fold(
+        () => [],
+        p =>
+          A.map(this.getAndCreateInstance)(
+            pipe(
+              p.deps,
+              O.fromNullable,
+              O.fold(
+                () => [],
+                deps => deps
+              )
+            )
+          )
+      )
     );
 
     return pipe(
       provider,
       O.fold(
         () => null,
-        _ => mapGenericToProvider<T>(
-          mapToGenericProvider<T>(_)
-        )(deps)
+        _ => mapGenericToProvider<T>(mapToGenericProvider<T>(_))(deps)
       )
     );
   };
@@ -131,9 +138,7 @@ export abstract class Injector {
   private getInstanceFromParents<T>(token: Token<T>) {
     if (!this.parent) return undefined;
 
-    const providers = mergeProviders(
-      getFlatProviderTree(this)
-    )(safeGetProvider(this));
+    const providers = mergeProviders(getFlatProviderTree(this))(safeGetProvider(this));
 
     return this.getInstanceFromRegistry(token, providers);
   }
@@ -145,11 +150,15 @@ export abstract class Injector {
   }
 }
 
-export const safeGetProvider = (injector: Injector) => pipe(
-  providers.get(injector),
-  O.fromNullable,
-  O.fold(() => [], v => v)
-);
+export const safeGetProvider = (injector: Injector) =>
+  pipe(
+    providers.get(injector),
+    O.fromNullable,
+    O.fold(
+      () => [],
+      v => v
+    )
+  );
 
 export class StaticInjector extends Injector {
   get<T>(token: Token<T>): T | null {

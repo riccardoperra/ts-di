@@ -11,8 +11,7 @@
  * ```
  */
 export class InjectionToken<T> {
-  protected constructor(private _desc: string) {
-  }
+  protected constructor(private _desc: string) {}
 
   toString() {
     return `[ts-di/token] ${this._desc}`;
