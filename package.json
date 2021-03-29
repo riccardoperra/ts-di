@@ -9,6 +9,8 @@
     "test": "nx test",
     "lint": "nx workspace-lint && nx lint",
     "e2e": "nx e2e",
+    "build:all": "nx affected:build --all",
+    "test:all": "nx affected:test --all --codeCoverage --skip-nx-cache",
     "affected:apps": "nx affected:apps",
     "affected:libs": "nx affected:libs",
     "affected:build": "nx affected:build",
