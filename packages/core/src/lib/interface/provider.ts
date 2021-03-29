@@ -1,13 +1,30 @@
 import type { Type } from '../core/type';
 import { Token } from './token';
 
-export interface GenericProvider<T = any> {
-  provide: Token<T>;
-  useValue?: T;
-  useClass?: Type<T>;
-  useFactory?: (...args: any[]) => T;
-  deps?: []
+
+export enum DIProviderType {
+  FACTORY,
+  CLASS,
+  VALUE
 }
+
+export interface TypedClassProvider<T> extends ClassProvider<Type<T>> {
+  _type: DIProviderType.CLASS
+}
+
+export interface TypedFactoryProvider<T> extends FactoryProvider<T> {
+  _type: DIProviderType.FACTORY
+}
+
+export interface TypedValueProvider<T> extends ValueProvider<T> {
+  _type: DIProviderType.VALUE
+}
+
+export type GenericProvider<T = any> =
+  | TypedClassProvider<T>
+  | TypedFactoryProvider<T>
+  | TypedValueProvider<T>;
+
 /**
  * Define a provider that will be resolved returning the `useValue` property value.
  * @internal
@@ -25,6 +42,7 @@ export interface ValueProvider<T> {
 
   deps?: any[]
 }
+
 /**
  * Define a provider that will be resolved invoking a `useFactory` function.
  * The provider will support the case if the factory function return a promise or

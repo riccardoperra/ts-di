@@ -1,4 +1,4 @@
-import { DIProvider } from '../interface/provider';
+import { DIProvider } from '@ts-di/core';
 import { pipe } from 'fp-ts/function';
 import { fold, fromNullable } from 'fp-ts/Option';
 import { Injector, safeGetProvider } from '../core/injector';
