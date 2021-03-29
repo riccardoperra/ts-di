@@ -15,7 +15,8 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@ts-di/container": ["packages/container/src/index.ts"]
+      "@ts-di/container": ["packages/container/src/index.ts"],
+      "@ts-di/core": ["packages/core/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
