@@ -1,25 +1,6 @@
 {
   "version": 2,
   "projects": {
-    "container": {
-      "root": "packages/container",
-      "sourceRoot": "packages/container/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": { "lintFilePatterns": ["packages/container/**/*.ts"] }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/packages/container"],
-          "options": {
-            "jestConfig": "packages/container/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
     "core": {
       "root": "packages/core",
       "sourceRoot": "packages/core/src",
@@ -32,10 +13,7 @@
         "test": {
           "executor": "@nrwl/jest:jest",
           "outputs": ["coverage/packages/core"],
-          "options": {
-            "jestConfig": "packages/core/jest.config.js",
-            "passWithNoTests": true
-          }
+          "options": { "jestConfig": "packages/core/jest.config.js", "passWithNoTests": true }
         },
         "build": {
           "executor": "@nrwl/node:package",
