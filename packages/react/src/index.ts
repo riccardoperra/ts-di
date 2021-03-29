@@ -1,1 +1,2 @@
-export * from './lib/react';
+export { InjectorProvider } from './lib/context';
+export { useInject } from './lib/use-inject';

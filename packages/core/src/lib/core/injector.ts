@@ -30,7 +30,7 @@ export abstract class Injector {
   static create(
     registry: DIProvider[],
     parent?: Injector
-  ): Injector {
+  ): StaticInjector {
     const resolveProvider = <T>(p: DIProvider<T>): DIProvider => pipe(
       isProvider(p) ? true : null,
       O.fromNullable,
@@ -99,7 +99,6 @@ export abstract class Injector {
     }
     return instance;
   }
-
 
   private getInstanceFromRegistry = <T>(token: Token<T>, providers?: DIProvider[]): T | null | undefined => {
     const provider = pipe(

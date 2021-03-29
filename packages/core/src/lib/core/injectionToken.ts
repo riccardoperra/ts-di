@@ -23,7 +23,7 @@ export class InjectionToken<T> {
    * Create a new instance of InjectionToken with the given description
    * @param _desc
    */
-  static of<T = unknown>(_desc: string) {
+  static create<T = unknown>(_desc: string) {
     return new InjectionToken<T>(_desc);
   }
 }
