@@ -27,10 +27,12 @@ export abstract class Injector {
   abstract get<T>(token: Token<T>): T | null;
 
   static create(registry: DIProvider[], parent?: Injector): StaticInjector {
+    const safeProvider = <T>(p: DIProvider<T>) => (isProvider(p) ? O.some(p) : O.none);
+
     const resolveProvider = <T>(p: DIProvider<T>): DIProvider =>
       pipe(
-        isProvider(p) ? true : null,
-        O.fromNullable,
+        p,
+        safeProvider,
         O.fold(
           () => ({ provide: p as TypeProvider<T>, useClass: p } as DIProvider),
           () => p

@@ -8,9 +8,16 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/riccardoperra/ts-di",
+    "url": "https://github.com/riccardoperra/ts-di"
   },
-  "keywords": ["di", "dependency injection", "typescript", "react", "container", "ioc"],
+  "keywords": [
+    "di",
+    "dependency injection",
+    "typescript",
+    "react",
+    "container",
+    "ioc"
+  ],
   "scripts": {
     "nx": "nx",
     "start": "nx serve",
